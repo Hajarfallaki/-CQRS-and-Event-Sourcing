@@ -1,6 +1,6 @@
 # TP : Micro-service CQRS/Event Sourcing avec Spring Boot & Axon
 
-## 📝 Description du Projet
+##  Description du Projet
 
 Ce projet implémente un micro-service bancaire de gestion de comptes en utilisant les patterns de conception **Command Query Responsibility Segregation (CQRS)** et **Event Sourcing (ES)**.
 
@@ -10,7 +10,7 @@ Ce projet implémente un micro-service bancaire de gestion de comptes en utilisa
 
 ---
 
-## 🛠️ Prérequis
+##  Prérequis
 
 Pour lancer et tester l'application, les éléments suivants sont nécessaires :
 
@@ -21,7 +21,7 @@ Pour lancer et tester l'application, les éléments suivants sont nécessaires :
 
 ---
 
-## 🏗️ Structure du Projet (CQRS & DDD)
+##  Structure du Projet (CQRS & DDD)
 
 Le projet est organisé autour du package racine `ma.enset.java.demoescqrsaxon`, séparant clairement les responsabilités Commandes et Requêtes.
 
@@ -46,7 +46,7 @@ Le projet est organisé autour du package racine `ma.enset.java.demoescqrsaxon`,
 
 ---
 
-## ⚙️ Configuration du Projet
+##  Configuration du Projet
 
 ### 1. Dépendances Clés (pom.xml)
 
@@ -75,7 +75,7 @@ axon.axonserver.servers=localhost:8124
 
 ---
 
-## 💻 Démarrage du Projet
+##  Démarrage du Projet
 
 ### Étape 1 : Démarrer Axon Server
 
@@ -96,7 +96,7 @@ Lancer : `DemoEsCqrsAxonApplication`
 
 ---
 
-## 🧪 Tests Fonctionnels (Swagger UI)
+##  Tests Fonctionnels (Swagger UI)
 
 Endpoint Swagger : [http://localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html)
 
@@ -110,7 +110,7 @@ Endpoint Swagger : [http://localhost:8081/swagger-ui.html](http://localhost:8081
 
 ---
 
-## 📊 Visualisation des Événements (Axon Console)
+##  Visualisation des Événements (Axon Console)
 
 Console web : [http://localhost:8024](http://localhost:8024)
 
@@ -123,7 +123,24 @@ Cela permet d'observer l’Event Sourcing en action.
 
 ---
 
-## 📌 Conclusion
+## ✍️ Réalisé par
+
+**Hajar Elfallaki-Idrissi**
+
+##  Captures d'écran
+<img width="1013" height="911" alt="Capture d&#39;écran 2025-11-29 130635" src="https://github.com/user-attachments/assets/54e55ac4-72fe-4c4d-a2a9-c9179d9c8cc5" />
+<img width="1065" height="905" alt="Capture d&#39;écran 2025-11-29 130816" src="https://github.com/user-attachments/assets/078b234b-0206-449b-864d-af33e3529d5f" />
+<img width="922" height="809" alt="Capture d&#39;écran 2025-11-29 144901" src="https://github.com/user-attachments/assets/d5d8e290-f248-4fae-8fa2-f42b213b3d09" />
+<img width="1910" height="964" alt="Capture d&#39;écran 2025-11-29 154239" src="https://github.com/user-attachments/assets/aca7c588-b35b-4358-824b-5071f0d0708e" />
+<img width="1895" height="925" alt="Capture d&#39;écran 2025-11-29 154245" src="https://github.com/user-attachments/assets/da9ceeed-8b5e-4ac2-8552-0d303394634c" />
+<img width="1884" height="940" alt="Capture d&#39;écran 2025-11-29 154741" src="https://github.com/user-attachments/assets/5878c9b6-e420-461e-bd4c-95eef1e2c866" />
+<img width="1879" height="804" alt="Capture d&#39;écran 2025-11-29 155109" src="https://github.com/user-attachments/assets/cc54ba36-413a-43a6-9bc4-24435202bc30" />
+<img width="1475" height="355" alt="Capture d&#39;écran 2025-11-29 161803" src="https://github.com/user-attachments/assets/3bf48b04-ec72-435d-8fc0-209e27d6083c" />
+<img width="1832" height="925" alt="Capture d&#39;écran 2025-11-29 164248" src="https://github.com/user-attachments/assets/281551d2-3d3e-4e85-bbd6-9c3c476386f5" />
+
+
+
+##  Conclusion
 
 Ce projet démontre efficacement l’implémentation réelle des patterns CQRS & Event Sourcing avec Axon et Spring Boot.
 Il permet de comprendre :
