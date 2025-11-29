@@ -1,6 +1,66 @@
-TP : Micro-service CQRS/Event Sourcing avec Spring Boot & Axon📝 Description du ProjetCe projet implémente un micro-service bancaire de gestion de comptes en utilisant les patterns de conception Command Query Responsibility Segregation (CQRS) et Event Sourcing (ES).Command Side : Utilise les agrégats Axon pour traiter les commandes (CreateAccountCommand, CreditAccountCommand, DebitAccountCommand) et persiste les changements sous forme d'événements dans l'Event Store (Axon Server).Query Side : Utilise des Event Handlers pour mettre à jour une vue matérialisée des comptes (projection) stockée dans une base de données relationnelle (H2).Communication : Axon Framework gère le routage des commandes/requêtes et la distribution des événements via Axon Server.🛠️ PrérequisPour lancer et tester l'application, les éléments suivants sont nécessaires :Java Development Kit (JDK) : Version 17+ (ou celle utilisée dans votre projet, généralement définie dans votre IDE).Maven : Pour la gestion des dépendances et la construction du projet.Axon Server Standard Edition : Le serveur externe qui sert d'Event Store et de Routeur (fichier axonserver.jar).IDE : IntelliJ IDEA (recommandé) ou Eclipse.🏗️ Structure du Projet (CQRS & DDD)Le projet est organisé autour du package racine ma.enset.java.demoescqrsaxon, séparant clairement les responsabilités Commandes et Requêtes.1. 🟢 Command Side (Côté Écriture)PackageRôleClasses Clés (Exemples)commandsReprésente les intentions de changement d'état.CreateAccountCommand, CreditAccountCommand.eventsLes faits immuables stockés après l'exécution d'une commande.AccountCreatedEvent, AccountCreditedEvent.aggregatesLa logique centrale qui gère l'état du compte (méthodes @CommandHandler et @EventSourcingHandler).AccountAggregate.commands.controllersInterface REST pour envoyer les commandes au bus Axon.AccountCommandController.dtosObjets de transfert pour la réception des données des commandes.AddNewAccountRequestDTO.2. 🔵 Query Side (Côté Lecture / Projection)PackageRôleClasses Clés (Exemples)queriesLes requêtes pour lire l'état actuel des données.GetAccountByIdQuery, GetAllAccountsQuery.query.entitiesLes entités JPA (la vue matérialisée) stockées dans la base H2.Account.query.repositoriesInterfaces Spring Data JPA pour l'accès à la projection.AccountRepository.query.servicesContient les méthodes @QueryHandler et @EventHandler pour maintenir et répondre aux requêtes.AccountQueryHandler.⚙️ Configuration du Projet1. Dépendances Clés (pom.xml)axon-spring-boot-starter : Intégration complète d'Axon Framework.spring-boot-starter-data-jpa : Nécessaire pour le Query Side (Projection).h2 : Base de données en mémoire pour le Query Side.springdoc-openapi-starter-webmvc-ui : Pour l'interface de test Swagger UI.lombok : Pour la réduction du code passe-partout.2. Fichier application.propertiesPropertiesspring.application.name=demo-es-cqrs-axon
+# TP : Micro-service CQRS/Event Sourcing avec Spring Boot & Axon
 
-# Configuration H2 pour le Query Side (Projection)
+## 📝 Description du Projet
+
+Ce projet implémente un micro-service bancaire de gestion de comptes en utilisant les patterns de conception **Command Query Responsibility Segregation (CQRS)** et **Event Sourcing (ES)**.
+
+* **Command Side** : Utilise les agrégats Axon pour traiter les commandes (`CreateAccountCommand`, `CreditAccountCommand`, `DebitAccountCommand`) et persiste les changements sous forme d'événements dans l'Event Store (Axon Server).
+* **Query Side** : Utilise des `EventHandler` pour mettre à jour une vue matérialisée des comptes (projection) stockée dans une base de données relationnelle (H2).
+* **Communication** : Axon Framework gère le routage des commandes/requêtes et la distribution des événements via Axon Server.
+
+---
+
+## 🛠️ Prérequis
+
+Pour lancer et tester l'application, les éléments suivants sont nécessaires :
+
+* JDK : Version 17+
+* Maven
+* Axon Server Standard Edition (axonserver.jar)
+* IDE : IntelliJ IDEA (recommandé) ou Eclipse
+
+---
+
+## 🏗️ Structure du Projet (CQRS & DDD)
+
+Le projet est organisé autour du package racine `ma.enset.java.demoescqrsaxon`, séparant clairement les responsabilités Commandes et Requêtes.
+
+### 1. 🟢 Command Side (Côté Écriture)
+
+| Package              | Rôle                                          | Classes Clés                               |
+| -------------------- | --------------------------------------------- | ------------------------------------------ |
+| commands             | Intentions de changement d'état               | CreateAccountCommand, CreditAccountCommand |
+| events               | Les faits immuables déclenchés après commande | AccountCreatedEvent, AccountCreditedEvent  |
+| aggregates           | Logique centrale, gestion d'état              | AccountAggregate                           |
+| commands.controllers | API REST pour envoyer les commandes           | AccountCommandController                   |
+| dtos                 | Transport des données                         | AddNewAccountRequestDTO                    |
+
+### 2. 🔵 Query Side (Côté Lecture / Projection)
+
+| Package            | Rôle                                   | Classes Clés                             |
+| ------------------ | -------------------------------------- | ---------------------------------------- |
+| queries            | Lecture de l'état des comptes          | GetAccountByIdQuery, GetAllAccountsQuery |
+| query.entities     | Entités JPA (projection)               | Account                                  |
+| query.repositories | Repositories JPA                       | AccountRepository                        |
+| query.services     | Contains @EventHandler & @QueryHandler | AccountQueryHandler                      |
+
+---
+
+## ⚙️ Configuration du Projet
+
+### 1. Dépendances Clés (pom.xml)
+
+* axon-spring-boot-starter
+* spring-boot-starter-data-jpa
+* h2
+* springdoc-openapi-starter-webmvc-ui
+* lombok
+
+### 2. Configuration application.properties
+
+```
+spring.application.name=demo-es-cqrs-axon
+
 spring.datasource.url=jdbc:h2:mem:demo_es_cqrs_db
 spring.datasource.driver-class-name=org.h2.Driver
 spring.datasource.username=sa
@@ -10,8 +70,66 @@ spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
 
 server.port=8081
 
-# Configuration de la connexion à Axon Server
-# Doit correspondre au port gRPC (Gateway) d'Axon Server
 axon.axonserver.servers=localhost:8124
-💻 Instructions de DémarrageLe projet exige que le serveur Axon soit opérationnel avant l'application Spring Boot.Étape 1 : Démarrer Axon ServerLocaliser le fichier : Naviguez vers le répertoire contenant axonserver.jar.Lancer le serveur : Ouvrez un terminal et exécutez :Bashjava -jar axonserver.jar
-Vérification : L'interface de surveillance doit être accessible sur : http://localhost:8024.Étape 2 : Démarrer l'Application Spring BootOuvrez le projet dans votre IDE.Lancez la classe principale : ma.enset.java.demoescqrsaxon.DemoEsCqrsAxonApplication.Vérification de la connexion :L'application doit démarrer sur le port 8081.La console Axon (http://localhost:8024) doit afficher demo-es-cqrs-axon dans la section Applications.🧪 Tests Fonctionnels (via Swagger UI)Ouvrez l'interface de test : http://localhost:8081/swagger-ui.html.ÉtapeOpérationEndpointDescriptionSolde Attendu1CommandePOST /commands/accounts/createCréer un compte avec 1500 MAD (Récupérez l'UUID)1500.02CommandePUT /commands/accounts/creditCréditer le compte de 500 MAD.2000.03RequêteGET /query/accounts/byId/{id}Vérifier la mise à jour du solde dans le Query Side.2000.04CommandePUT /commands/accounts/debitDébiter le compte de 200 MAD.1800.05RequêteGET /query/accounts/byId/{id}Vérifier le solde final.1800.0📊 Visualisation (Axon Console)Utilisez la console pour surveiller le flux d'événements :Console Web : http://localhost:8024Event Store : Consultez les événements stockés pour chaque agrégat sous le menu Event Store.
+```
+
+---
+
+## 💻 Démarrage du Projet
+
+### Étape 1 : Démarrer Axon Server
+
+```
+java -jar axonserver.jar
+```
+
+Interface de contrôle : [http://localhost:8024](http://localhost:8024)
+
+### Étape 2 : Démarrer l'application Spring Boot
+
+Lancer : `DemoEsCqrsAxonApplication`
+
+💡 Vérification :
+
+* API fonctionnelle sur [http://localhost:8081](http://localhost:8081)
+* Axon Console montre l'application connectée
+
+---
+
+## 🧪 Tests Fonctionnels (Swagger UI)
+
+Endpoint Swagger : [http://localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html)
+
+| Action             | Endpoint                         | Résultat     |
+| ------------------ | -------------------------------- | ------------ |
+| Créer un compte    | `POST /commands/accounts/create` | solde = 1500 |
+| Créditer 500 MAD   | `PUT /commands/accounts/credit`  | solde = 2000 |
+| Lire solde (Query) | `GET /query/accounts/byId/{id}`  | solde = 2000 |
+| Débiter 200 MAD    | `PUT /commands/accounts/debit`   | solde = 1800 |
+| Lire solde final   | `GET /query/accounts/byId/{id}`  | solde = 1800 |
+
+---
+
+## 📊 Visualisation des Événements (Axon Console)
+
+Console web : [http://localhost:8024](http://localhost:8024)
+
+Dans *Event Store*, vous pouvez consulter :
+
+* la liste des agrégats
+* l'historique complet des événements par compte
+
+Cela permet d'observer l’Event Sourcing en action.
+
+---
+
+## 📌 Conclusion
+
+Ce projet démontre efficacement l’implémentation réelle des patterns CQRS & Event Sourcing avec Axon et Spring Boot.
+Il permet de comprendre :
+
+* séparation lecture/écriture
+* stockage événementiel du changement d’état
+* reconstruction d’état depuis les événements
+
+Ce modèle est idéal pour les systèmes hautement scalables, audités et évolutifs.
